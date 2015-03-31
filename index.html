@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Lazy Loading design pattern</title>
+
+		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+		<meta name="author" content="Hakim El Hattab">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/white.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h1>Lazy Loading</h1>
+					<h3>the Design Pattern</h3>
+				</section>
+
+				<section>
+					<h2>Definition</h2>
+					<p>
+						<blockquote>
+							"Lazy loading is a design pattern commonly used in computer programming to defer initialization of an object until the point at which it is needed. It can contribute to efficiency in the program's operation if properly and appropriately used. The opposite of lazy loading is eager loading."
+						</blockquote>
+						-- wikipedia
+					</p>
+				</section>
+
+				<section>
+					<h2>What does that mean?</h2>
+					<p>
+						You want to be as lazy as possible, and hope that someone else comes along and does all the work for you.
+					</p>
+				</section>
+
+				<section>
+					<h2>Can you show me a picture?</h2>
+					<p>
+						<img src="http://i.imgur.com/5GbW690.gif" width="66%" />
+					</p>
+					<p>This dog is doing it right</p>
+				</section>
+
+				<section>
+					<h2>Wait what?</h2>
+					<p>
+						Lazy loading really means waiting to get data or process an object until you need it; not before.  If you get data before and it's never used, the time it took was wasted.  Also, getting all your data up front can make the user think the application is slow or unresponsive at first.  Deferring certain data/processing to lazy load lets your application focus on more immediate/important code.
+					</p>
+				</section>
+
+				<section>
+					<h2>Implementations</h2>
+					<p>
+						There are four common implementations:
+						<ul>
+							<li>Lazy initialization</li>
+							<li>Virtual proxy</li>
+							<li>Ghost</li>
+							<li>Value holder</li>
+						</ul>
+					</p>
+				</section>
+
+				<section>
+					<h2>Lazy initialization</h2>
+					<p>Probably the most common implementation</p>
+					<a target="_blank" href="https://gist.github.com/developerdizzle/a5d08a2539cc77450df7">Example</a>
+				</section>
+
+				<section>
+					<h2>Virtual Proxy</h2>
+					<p>A virtual proxy object shares an interface with the "real" object.  The first time a property of the virtual proxy is accessed, the real object gets initialized.  From that point on, accessing properties of the virtual object returns the corresponding property of the real object.</p>
+					<p>This basically combines the Lazy initialization and Proxy patterns</p>
+					<a href="https://gist.github.com/developerdizzle/c96b1402b3ebe74de06a" target="_blank">Example</a>
+				</section>
+
+				<section>
+					<h2>Ghost</h2>
+					<p>The object is partially loaded, usually only with its identifier.  The rest of the data is loaded the first time a property is accessed.</p>
+					<a target="_blank" href="https://gist.github.com/developerdizzle/4c8bde6a055894072520">Example</a>
+				</section>
+
+				<section>
+					<h2>Value holder</h2>
+					<p>Another object handles the lazy loading behavior and is used in the main object's property get accessors.</p>
+					<pre><code class="hljs cs">private ValueHolder&lt;Widget&gt; valueHolder;
+ 
+public Widget MyWidget 
+{
+    get
+    {
+        return valueHolder.GetValue();
+    }
+}</code></pre>
+				</section>
+
+				<section>
+					<h2>System.Lazy</h2>
+					<p>.NET 4.0 has a class just for lazy initialization!</p>
+					<a href="https://msdn.microsoft.com/en-us/library/dd642331%28v=vs.110%29.aspx" target="_blank">MSDN</a>
+					<p>You specify the type of the object (type parameter) and the initialization function (constructor parameter) and it works like Nullable&lt;T&gt;, giving you IsValueCreated and Value properties.</p>
+				</section>
+
+				<section>
+					<h2>Other examples</h2>
+					<ul>
+						<li>Lazy loading is frequently used with the Singleton pattern</li>
+						<li><code>IQueryable</code>/<code>IEnumerable</code> uses a variation of lazy loading called "deferred execution" - it's methods are accessible, but the data is not populated until it's realized by a <code>ToArray()</code> or other method call.</li>
+						<li>Entity Framework and other ORMs can use lazy loading when retrieving table data joined with a foreign key.  Eg: <code>User.Address.City</code></li>
+						<li>There are tons of other examples of lazy loading - infinite scrolling, images rendered in viewport, etc.</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Questions?</h2>
+					<p>too bad we're out of time</p>
+				</section>
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				width: '90%',
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
